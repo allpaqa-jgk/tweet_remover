@@ -1,0 +1,43 @@
+{
+  "name": "Tweet Remover Dev Container",
+  "image": "mcr.microsoft.com/devcontainers/python:3.12",
+  
+  "features": {
+    "ghcr.io/devcontainers/features/github-cli:1": {
+      "version": "latest"
+    }
+  },
+  
+  "postCreateCommand": "pip install -r requirements.txt",
+  
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-python.black-formatter",
+        "oderwat.indent-rainbow",
+        "GitHub.copilot-chat",
+        "github.vscode-github-actions",
+        "GitHub.copilot",
+        "GitHub.vscode-pull-request-github",
+        "mhutchie.git-graph"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "python.linting.enabled": true,
+        "python.linting.pylintEnabled": false,
+        "[python]": {
+          "editor.defaultFormatter": "ms-python.black-formatter",
+          "editor.formatOnSave": true
+        },
+        "github-actions.workflows.pinned.workflows": [
+          ".github/workflows/fetch_and_remove_tweets.yml",
+          ".github/workflows/remove_retweets.yml"
+        ]
+      }
+    }
+  },
+  
+  "remoteUser": "vscode"
+}
