@@ -94,6 +94,7 @@ def save_secrets(user_id, access_token, refresh_token, cutoff_days):
         "X_TARGET_IDS_JSON", '[{type: "dummy", id: "str"}]'
     )
     success &= github_service.set_github_variable("X_CUTOFF_DAYS", cutoff_days)
+    success &= github_service.set_github_secret("WEBHOOK_URL", config.WEBHOOK_URL)
     print("X_ACCESS_TOKEN:", access_token)
     if success:
         print("\n✓ Setup completed successfully!")

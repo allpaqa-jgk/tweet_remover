@@ -14,14 +14,14 @@ def check_tokens(access_token, refresh_token):
     if not access_token:
         print("Error: No access token in response")
         print(f"Response: {access_token}")
-        sys.exit(1)
+        raise Exception("No access token received")
 
     if not refresh_token:
         print(
             "Error: No refresh token received. Make sure 'offline.access' scope is included."
         )
         print(f"Response: {refresh_token}")
-        sys.exit(1)
+        raise Exception("No refresh token received")
 
     print("✓ Tokens received successfully")
 
