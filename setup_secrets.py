@@ -99,6 +99,7 @@ def save_secrets(user_id, access_token, refresh_token, cutoff_days) -> None:
 
     # Just print current access token for user reference
     print("X_ACCESS_TOKEN:", access_token)
+    print("X_REFRESH_TOKEN:", refresh_token)
 
     if success:
         print("\n✓ Setup completed successfully!")

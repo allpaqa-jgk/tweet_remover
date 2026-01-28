@@ -37,9 +37,11 @@ def my_client() -> tweepy.Client:
 
     if access_token:
         MY_CLIENT = tweepy.Client(access_token)
+        print("✓ Using past access token")
         return MY_CLIENT
 
-    if "MY_CLIENT" in globals():
+    if "MY_CLIENT" in globals() and MY_CLIENT is not None:
+        print("✓ Using cached access token")
         return MY_CLIENT
 
     """Create and return authenticated Twitter client."""
@@ -61,10 +63,9 @@ def my_client() -> tweepy.Client:
         state.set_access_token(access_token)
 
         # Update refresh token if a new one was provided
-        new_refresh_token = refresh_token
-        if new_refresh_token and new_refresh_token != config.X_REFRESH_TOKEN:
-            utils.print_secret(new_refresh_token, "New refresh token received")
-            github_service.set_github_secret("X_REFRESH_TOKEN", new_refresh_token)
+        if refresh_token and refresh_token != config.X_REFRESH_TOKEN:
+            utils.print_secret(refresh_token, "New refresh token received")
+            github_service.set_github_secret("X_REFRESH_TOKEN", refresh_token)
 
             if "--debug" in sys.argv:
                 pprint(token_data)
@@ -72,6 +73,7 @@ def my_client() -> tweepy.Client:
         # Create client with access token
         MY_CLIENT = tweepy.Client(access_token)
 
+        print("✓ Using refreshed access token")
         return MY_CLIENT
     except requests.exceptions.RequestException as e:
         print(f"Error refreshing token: {e}")

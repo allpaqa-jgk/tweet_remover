@@ -23,7 +23,7 @@ def do() -> None:
     print("Fetching tweets from Twitter API...")
     response = twitter_service.get_my_tweets()
 
-    if len(response.data) > 0:
+    if response.data is not None and len(response.data) > 0:
         for tweet in response.data:
             referenced_tweets = tweet.get("referenced_tweets", [])
             utils.debug_print(tweet, "Processing fetched tweet")
@@ -36,6 +36,8 @@ def do() -> None:
                 all_tweets.append({"type": "retweet", "id": tweet["id"]})
             else:
                 all_tweets.append({"type": "tweet", "id": tweet["id"]})
+    else:
+        print("No new tweets found from Twitter API.")
 
     utils.debug_print(all_tweets, "All tweet IDs after fetching")
     utils.set_tweet_ids(all_tweets)
