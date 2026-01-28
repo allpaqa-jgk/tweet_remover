@@ -4,18 +4,18 @@ from urllib.parse import parse_qs, urlparse
 import states.setup_state as setup_state
 
 
-def start_and_wait():
+def start_and_wait() -> None:
     server = start_server()
     wait_for_callback(server)
 
 
-def start_server():
+def start_server() -> HTTPServer:
     # Start local server to receive callback
 
     return HTTPServer(("localhost", 8080), OAuthCallbackHandler)
 
 
-def wait_for_callback(server):
+def wait_for_callback(server: HTTPServer) -> None:
     print("Waiting for OAuth2 callback...")
     server.handle_request()
 
@@ -23,11 +23,11 @@ def wait_for_callback(server):
 class OAuthCallbackHandler(BaseHTTPRequestHandler):
     """Handle OAuth callback from X API."""
 
-    def log_message(self, format, *args):
+    def log_message(self, format, *args) -> None:
         """Suppress default logging."""
         pass
 
-    def do_GET(self):
+    def do_GET(self) -> None:
         global auth_code
 
         """Handle GET request from OAuth redirect."""

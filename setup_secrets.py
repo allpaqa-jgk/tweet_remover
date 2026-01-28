@@ -18,7 +18,7 @@ import services.twitter as twitter_service
 import utils.servers as servers
 
 
-def check_config():
+def check_config() -> None:
     # Check if secrets are configured
     if not config.X_CLIENT_ID:
         print("Error: X_CLIENT_ID environment variable not set")
@@ -34,7 +34,7 @@ def check_config():
         sys.exit(1)
 
 
-def authorize_url():
+def authorize_url() -> str:
     # Build authorization URL
     auth_params = {
         "response_type": "code",
@@ -52,7 +52,7 @@ def authorize_url():
     return auth_url
 
 
-def check_auth_code():
+def check_auth_code() -> None:
     if not setup_state.auth_code:
         print("Error: No authorization code received")
         sys.exit(1)
@@ -60,7 +60,7 @@ def check_auth_code():
     print("✓ Authorization code received", setup_state.auth_code)
 
 
-def input_cutoff_days():
+def input_cutoff_days() -> str:
     while True:
         cutoff_input = input("Please input ignored days (default 14 days): ").strip()
         if not cutoff_input:
@@ -80,7 +80,7 @@ def input_cutoff_days():
     return cutoff_days
 
 
-def save_secrets(user_id, access_token, refresh_token, cutoff_days):
+def save_secrets(user_id, access_token, refresh_token, cutoff_days) -> None:
     success = True
     success &= github_service.set_github_secret("GH_TOKEN", config.GH_TOKEN)
     success &= github_service.set_github_secret("X_UNTIL_ID", config.X_UNTIL_ID)
@@ -108,7 +108,7 @@ def save_secrets(user_id, access_token, refresh_token, cutoff_days):
         sys.exit(1)
 
 
-def main():
+def main() -> None:
 
     print("=== X (Twitter) OAuth2 PKCE Setup ===")
     print(f"Redirect URI: {config.REDIRECT_URI}")

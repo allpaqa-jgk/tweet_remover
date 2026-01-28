@@ -10,7 +10,7 @@ import services.twitter as twitter_service
 # API Rate limit: 17 requests / 24 hours PER USER
 #                 17 requests / 24 hours PER APP
 # Delete tweets based on fetched queues
-def do():
+def do() -> None:
     print("Deleting tweets from fetched queues...")
 
     all_tweets = utils.get_tweet_ids()

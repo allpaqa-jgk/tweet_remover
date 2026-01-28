@@ -8,7 +8,7 @@ import services.twitter as twitter_service
 # get cached tweets and new targets older than cutoff days
 # API Rate limit: 1 requests / 15 mins PER USER
 # Return [{type: "tweet"/"retweet", id: str}, ...] from Github Secrets or X API
-def do():
+def do() -> None:
     print("Fetching tweets for retweet deletion task...")
 
     all_tweets = utils.get_tweet_ids()

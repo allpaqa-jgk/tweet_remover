@@ -13,7 +13,7 @@ MY_CLIENT = None
 
 
 # Check presence of tokens in response
-def check_tokens(access_token, refresh_token):
+def check_tokens(access_token: str, refresh_token: str) -> None:
     if not access_token:
         print("Error: No access token in response")
         print(f"Response: {access_token}")
@@ -98,7 +98,7 @@ def my_client() -> tweepy.Client:
 
 
 # Exchange authorization code for tokens
-def exchange_code_for_token(code: str):
+def exchange_code_for_token(code: str) -> dict:
     data = {
         "grant_type": "authorization_code",
         "code": code,
@@ -117,7 +117,7 @@ def exchange_code_for_token(code: str):
 
 
 # Exchange refresh token for new access token
-def exchange_refresh_token():
+def exchange_refresh_token() -> dict:
     data = {
         "grant_type": "refresh_token",
         "refresh_token": config.X_REFRESH_TOKEN,
@@ -134,7 +134,7 @@ def exchange_refresh_token():
 
 
 # Request token from X API
-def request_token(data={}):
+def request_token(data: dict = {}) -> dict:
     # Prepare token request
     token_url = "https://api.x.com/2/oauth2/token"
     token = utils.encode_basic_token(config.X_CLIENT_ID, config.X_CLIENT_SECRET)
@@ -157,7 +157,7 @@ def request_token(data={}):
 
 # Get authenticated user info
 # Rate limit: 25 requests / 24 hours PER USER
-def get_my_info():
+def get_my_info() -> tweepy.Response | requests.models.Response:
     params = {"tweet_fields": ["created_at"], "user_auth": False}
 
     try:
@@ -170,7 +170,7 @@ def get_my_info():
 
 
 # Rate limit: 1 requests / 15 mins PER USER
-def get_my_tweets():
+def get_my_tweets() -> tweepy.Response | requests.models.Response:
     # Get configurable cutoff days (default to 14)
     if config.X_USER_ID == "__None__":
         print("Error: X_USER_ID is not set")
@@ -207,9 +207,9 @@ def get_my_tweets():
         params["until_id"] = config.X_UNTIL_ID
 
     try:
-    utils.debug_print(params, "Fetching tweets with params")
-    result = my_client().get_users_tweets(**params)
-    utils.debug_print(result, "Fetched tweets response")
+        utils.debug_print(params, "Fetching tweets with params")
+        result = my_client().get_users_tweets(**params)
+        utils.debug_print(result, "Fetched tweets response")
     except tweepy.TweepyException as e:
         print(f"Error fetching tweets: {e}")
         raise e
@@ -218,7 +218,7 @@ def get_my_tweets():
 
 # Rate limit: 17 requests / 24 hours PER USER
 #             17 requests / 24 hours PER APP
-def delete_my_tweet(id):
+def delete_my_tweet(id: str) -> tweepy.Response | requests.models.Response:
     params = {
         "id": id,
         "user_auth": False,
@@ -227,7 +227,7 @@ def delete_my_tweet(id):
 
 
 # Rate limit: 1 requests / 15 mins PER USER
-def delete_my_retweet(id):
+def delete_my_retweet(id: str) -> tweepy.Response | requests.models.Response:
     params = {
         "source_tweet_id": id,
         "user_auth": False,

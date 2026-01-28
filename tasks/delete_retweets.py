@@ -7,7 +7,7 @@ import services.twitter as twitter_service
 
 
 # Delete retweets based on fetched queues
-def do():
+def do() -> None:
     print("Deleting retweets from fetched queues...")
 
     all_tweets = utils.get_tweet_ids()

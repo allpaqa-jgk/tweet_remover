@@ -3,7 +3,7 @@ import os
 import subprocess
 
 
-def get_github_auth_status():
+def get_github_auth_status() -> bool:
     """Check if gh CLI is authenticated."""
     try:
         subprocess.run(
@@ -19,7 +19,7 @@ def get_github_auth_status():
         return False
 
 
-def set_github_secret(secret_name, secret_value):
+def set_github_secret(secret_name: str, secret_value: str) -> bool:
     """Set a GitHub secret using gh CLI."""
     try:
         # Use gh CLI to set the secret
@@ -36,7 +36,7 @@ def set_github_secret(secret_name, secret_value):
         raise e
 
 
-def set_github_variable(var_name, var_value):
+def set_github_variable(var_name: str, var_value: str) -> bool:
     """Set a GitHub variable using gh CLI."""
     try:
         print(f"Setting variable {var_name}: {var_value}")
@@ -54,11 +54,11 @@ def set_github_variable(var_name, var_value):
         raise e
 
 
-def save_target_ids(ids):  # [{type: "tweet"/"retweet", id: str}, ...]
+def save_target_ids(ids: list) -> bool:  # [{type: "tweet"/"retweet", id: str}, ...]
     # リストを JSON 文字列にして Secret に保存
     try:
-    json_str = json.dumps(ids)
-    subprocess.run(["gh", "secret", "set", "X_TARGET_IDS_JSON", "--body", json_str])
+        json_str = json.dumps(ids)
+        subprocess.run(["gh", "secret", "set", "X_TARGET_IDS_JSON", "--body", json_str])
         return True
     except subprocess.CalledProcessError as e:
         print(f"✗ Failed to save target IDs: {e.stderr}")

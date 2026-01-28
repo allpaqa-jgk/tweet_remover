@@ -92,13 +92,17 @@ def debug_print(value, label=None):
 
 
 # get tweet IDs from app_state.tweets
-def get_tweet_ids():  # [{type: "tweet"/"retweet", id: str}, ...]
+def get_tweet_ids() -> (
+    list[dict["type":str, "id":str]]
+):  # [{type: "tweet"/"retweet", id: str}, ...]
     """Get tweet IDs from app state."""
     return app_state.get_tweets()
 
 
 # update app_state.tweets and save to Github Secrets
-def set_tweet_ids(tweets):  # [{type: "tweet"/"retweet", id: str}, ...]
+def set_tweet_ids(
+    tweets: list[dict["type":str, "id":str]],
+) -> None:  # [{type: "tweet"/"retweet", id: str}, ...]
     tweets_json = json.dumps(tweets)
     app_state.set_tweets(tweets)
     github_service.save_target_ids(tweets)
