@@ -28,7 +28,7 @@ def do() -> None:
             except tweepy.TweepyException as e:
                 print(f"Error deleting retweet ID {tweet['id']}: {e}")
 
-            if num_deleted >= app_config.REMOVE_RETWEETS_BATCH_SIZE:  # 1
+            if num_deleted >= app_config.REMOVE_RETWEETS_BATCH_SIZE:
                 break
     for removed_id in removed_ids:
         all_tweets = [t for t in all_tweets if t["id"] != removed_id]
