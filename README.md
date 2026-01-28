@@ -30,10 +30,10 @@
 
 ## セットアップ（ローカル）
 1. リポジトリをクローン
-  - git clone https://github.com/allpaqa-jgk/tweet_remover.git
+  - `git clone https://github.com/allpaqa-jgk/tweet_remover.git`
 2. Devcontainer 作成、起動(パッケージインストール)
 3. 環境変数を準備
-  - cp .env.sample .env
+  - `cp .env.sample .env`
   - `.env` を編集して API キー等を設定
 4. Secrets の設定
   - `python setup_secrets.py` を実行して Github Secrets / Variables に登録
@@ -49,15 +49,18 @@ Devcontainer 以外での動作は未検証なため、問題が発生しても�
 ## 環境変数
 .env.sample を元に、少なくとも以下を設定してください。
 
-- GH_TOKEN=repo, workflow 権限を持つ Github Access Token
-- X_CLIENT_ID=X アプリのクライアントID
-- X_CLIENT_SECRET=X アプリのクライアントシークレット
-- X_CUTOFF_DAYS=何日前までのツイートを削除するか
-- WEBHOOK_URL=Discord 通知用の Webhook URL
+- `GH_TOKEN`: repo, workflow 権限を持つ Github Access Token
+- `X_CLIENT_ID`: X アプリのクライアントID
+- `X_CLIENT_SECRET`: X アプリのクライアントシークレット
+- `X_CUTOFF_DAYS`: 何日前までのツイートを削除するか
+- `WEBHOOK_URL`: Discord 通知用の Webhook URL
 
 ## 使い方
 - ローカルで手動実行
-  - `python setup_secrets.py` : Github Secrets / Variables の設定, Refresh Token の取得
+  - `cp .env.sample .env`
+    - 環境変数を設定
+  - `python setup_secrets.py`
+    - Github Secrets / Variables の設定, Refresh Token の取得
 - Github Actions での定期実行
   - `Fetch and Remove Tweets`
     - 毎日実行
