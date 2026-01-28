@@ -2,6 +2,7 @@
 
 import utils.common as utils
 import states.app_state as app_state
+import configs.app_config as app_config
 import services.twitter as twitter_service
 
 
@@ -13,8 +14,8 @@ def do():
 
     all_tweets = app_state.get_tweets()
 
-    # return cached if we have more than 100 tweets
-    if len(all_tweets) > 100:
+    # return cached if we have more than NUM_TO_FETCH(100) tweets
+    if len(all_tweets) > app_config.NUM_TO_FETCH:
         return all_tweets
 
     # Fetch tweets from Twitter API if not enough cached

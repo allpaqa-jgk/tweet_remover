@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 # Load environment variables
 load_dotenv()
 
+NUM_TO_FETCH = 100
 NUM_TO_DELETE = 100
 REMOVE_TWEETS_BATCH_SIZE = 10
 REMOVE_RETWEETS_BATCH_SIZE = 1
