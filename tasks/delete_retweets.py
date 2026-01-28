@@ -20,7 +20,7 @@ def do():
     removed_ids = set()
     for tweet in all_tweets:
         if tweet["type"] == "retweet":
-            response = twitter_service.delete_my_tweet(tweet["id"])
+            response = twitter_service.delete_my_retweet(tweet["id"])
             if response.status_code == 200:
                 print(f"Deleted retweet ID {tweet['id']}")
                 num_deleted += 1

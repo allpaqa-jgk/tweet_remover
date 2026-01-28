@@ -211,7 +211,7 @@ def delete_my_tweet(id):
 
 
 # Rate limit: 1 requests / 15 mins PER USER
-def delete_my_retweets(id):
+def delete_my_retweet(id):
     params = {
         "source_tweet_id": id,
         "user_auth": False,
