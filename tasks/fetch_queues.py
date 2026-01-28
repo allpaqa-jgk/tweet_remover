@@ -32,6 +32,7 @@ def do():
         for tweet in data["data"]:
             if (
                 tweet.get("referenced_tweets")
+                and len(tweet["referenced_tweets"]) > 0
                 and tweet["referenced_tweets"][0]["type"] == "retweeted"
             ):
                 all_tweets.append({"type": "retweet", "id": tweet["id"]})
