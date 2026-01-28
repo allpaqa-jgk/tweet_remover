@@ -29,10 +29,13 @@ def do() -> None:
                 num_deleted += 1
                 removed_ids.add(tweet["id"])
             except tweepy.TweepyException as e:
+                # Failed to delete - keep in queue for retry
                 print(f"Error deleting tweet ID {tweet['id']}: {e}")
+                continue
 
             if num_deleted >= app_config.REMOVE_TWEETS_BATCH_SIZE:
                 break
+
     for removed_id in removed_ids:
         all_tweets = [t for t in all_tweets if t["id"] != removed_id]
 

@@ -82,6 +82,7 @@ def input_cutoff_days() -> str:
 
 def save_secrets(user_id, access_token, refresh_token, cutoff_days) -> None:
     success = True
+    # Save secrets to GitHub
     success &= github_service.set_github_secret("GH_TOKEN", config.GH_TOKEN)
     success &= github_service.set_github_secret("X_UNTIL_ID", config.X_UNTIL_ID)
     success &= github_service.set_github_secret("X_CLIENT_ID", config.X_CLIENT_ID)
@@ -90,12 +91,15 @@ def save_secrets(user_id, access_token, refresh_token, cutoff_days) -> None:
     )
     success &= github_service.set_github_secret("X_USER_ID", str(user_id))
     success &= github_service.set_github_secret("X_REFRESH_TOKEN", refresh_token)
-    success &= github_service.set_github_variable("X_CUTOFF_DAYS", cutoff_days)
     success &= github_service.set_github_secret("WEBHOOK_URL", config.WEBHOOK_URL)
-
     dummy = [{"type": "dummy", "id": "str"}]
     success &= github_service.save_target_ids(dummy)
+    # Save variables to GitHub
+    success &= github_service.set_github_variable("X_CUTOFF_DAYS", cutoff_days)
+
+    # Just print current access token for user reference
     print("X_ACCESS_TOKEN:", access_token)
+
     if success:
         print("\n✓ Setup completed successfully!")
         print("\nNext steps:")

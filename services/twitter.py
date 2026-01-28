@@ -64,7 +64,7 @@ def my_client() -> tweepy.Client:
         new_refresh_token = refresh_token
         if new_refresh_token and new_refresh_token != config.X_REFRESH_TOKEN:
             utils.print_secret(new_refresh_token, "New refresh token received")
-            github.set_github_variable("X_REFRESH_TOKEN", new_refresh_token)
+            github.set_github_secret("X_REFRESH_TOKEN", new_refresh_token)
 
             if "--debug" in sys.argv:
                 pprint(token_data)
@@ -89,8 +89,8 @@ def my_client() -> tweepy.Client:
                     print("Wiping secrets to prevent repeated failures on next run")
                     print("Please run setup_secret.py again to re-authenticate")
                     # Wipe the secrets so next run knows setup is needed
-                    github.set_github_variable("X_REFRESH_TOKEN", "__None__")
-                    github.set_github_variable("X_UNTIL_ID", "__None__")
+                    github.set_github_secret("X_REFRESH_TOKEN", "__None__")
+                    github.set_github_secret("X_UNTIL_ID", "__None__")
         raise Exception("Failed to refresh access token") from e
     except Exception as e:
         print(f"Error refreshing token: {e}")
