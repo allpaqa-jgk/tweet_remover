@@ -1,0 +1,76 @@
+name: Fetch and Remove Tweets
+
+on:
+  schedule:
+    # Run every hour at minute 0
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+    inputs:
+      check_only:
+        description: 'Run connectivity check only'
+        required: false
+        type: boolean
+        default: false
+      debug:
+        description: 'Show Traceback on errors'
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  daily-batch-job:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: read
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+      
+      - name: Install GitHub CLI
+        run: |
+          type -p gh >/dev/null || {
+            curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+            sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg
+            echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+            sudo apt update
+            sudo apt install gh -y
+          }
+      
+      - name: Fetch and Remove Tweets
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          X_CLIENT_ID: ${{ secrets.X_CLIENT_ID }}
+          X_CLIENT_SECRET: ${{ secrets.X_CLIENT_SECRET }}
+          X_REFRESH_TOKEN: ${{ secrets.X_REFRESH_TOKEN }}
+          X_UNTIL_ID: ${{ secrets.X_UNTIL_ID }}
+          X_CUTOFF_DAYS: ${{ vars.X_CUTOFF_DAYS }}
+          X_USER_ID: ${{ secrets.X_USER_ID }}
+          X_TARGET_IDS_JSON: ${{ secrets.X_TARGET_IDS_JSON }}
+          WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
+          CHECK_ONLY: ${{ inputs.check_only }}
+          DEBUG: ${{ inputs.debug }}
+        run: |
+          if [ "$DEBUG" = "true" ]; then
+            python -u -m batches.fetch_and_delete_tweets --debug
+          else
+            python -u -m batches.fetch_and_delete_tweets
+          fi
+          if [ $? -ne 0 ]; then
+            echo "Batch job failed."
+            exit 1
+          else
+            echo "Batch job completed successfully."
+          fi
