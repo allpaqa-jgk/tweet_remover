@@ -102,9 +102,9 @@ def get_tweet_ids() -> list[dict[str, str]]:
 # update app_state.tweets and save to Github Secrets
 # [{type: "tweet"/"retweet", id: str}, ...]
 def set_tweet_ids(tweets: list[dict[str, str]]) -> None:
-    tweets_json = json.dumps(tweets)
     app_state.set_tweets(tweets)
+    if len(tweets) == 0:
+        tweets = [{"type": "dummy", "id": "str"}]
     github_service.save_target_ids(tweets)
-    # TODO: Remove set_github_variable for X_TARGET_IDS_JSON after check on Github Actions
-    github_service.set_github_variable("X_TARGET_IDS_JSON", tweets_json)
+    tweets_json = json.dumps(tweets)
     debug_print(tweets_json, "Updated tweet IDs JSON")

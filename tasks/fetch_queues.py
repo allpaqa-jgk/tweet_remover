@@ -13,6 +13,7 @@ def do() -> None:
     print("Fetching tweets for retweet deletion task...")
 
     all_tweets = utils.get_tweet_ids()
+    utils.debug_print(all_tweets, "Currently cached tweet IDs")
 
     # return cached if we have more than NUM_TO_FETCH(100) tweets
     if len(all_tweets) > app_config.NUM_TO_FETCH:
@@ -21,17 +22,20 @@ def do() -> None:
     # Fetch tweets from Twitter API if not enough cached
     print("Fetching tweets from Twitter API...")
     response = twitter_service.get_my_tweets()
-    utils.debug_print(response, "Twitter API response for fetching tweets")
 
-    if "data" in response:
-        for tweet in response["data"]:
+    if len(response.data) > 0:
+        for tweet in response.data:
+            referenced_tweets = tweet.get("referenced_tweets", [])
+            utils.debug_print(tweet, "Processing fetched tweet")
+            utils.debug_print(referenced_tweets, "Referenced tweets")
             if (
-                tweet.get("referenced_tweets")
-                and len(tweet["referenced_tweets"]) > 0
-                and tweet["referenced_tweets"][0]["type"] == "retweeted"
+                referenced_tweets
+                and len(referenced_tweets) > 0
+                and referenced_tweets[0].type == "retweeted"
             ):
                 all_tweets.append({"type": "retweet", "id": tweet["id"]})
             else:
                 all_tweets.append({"type": "tweet", "id": tweet["id"]})
 
+    utils.debug_print(all_tweets, "All tweet IDs after fetching")
     utils.set_tweet_ids(all_tweets)
