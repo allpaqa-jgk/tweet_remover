@@ -211,9 +211,8 @@ def get_my_tweets() -> tweepy.Response | requests.models.Response:
         result = my_client().get_users_tweets(**params)
         utils.debug_print(result, "Fetched tweets response")
 
-        data = result.json()
-        if "data" in data and len(data["data"]) > 0:
-            github_service.set_github_secret("X_UNTIL_ID", data["data"][-1]["id"])
+        if "data" in result and len(result["data"]) > 0:
+            github_service.set_github_secret("X_UNTIL_ID", result["data"][-1]["id"])
         else:
             print("No tweets found in the fetched data.")
             github_service.set_github_secret("X_UNTIL_ID", "__None__")

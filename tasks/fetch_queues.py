@@ -18,14 +18,10 @@ def do() -> None:
     if len(all_tweets) > app_config.NUM_TO_FETCH:
         return
 
-    try:
-        # Fetch tweets from Twitter API if not enough cached
-        print("Fetching tweets from Twitter API...")
-        response = twitter_service.get_my_tweets()
-        utils.debug_print(response, "Twitter API response for fetching tweets")
-    except tweepy.TweepyException as e:
-        print(f"Error fetching tweets: {e}")
-        raise e
+    # Fetch tweets from Twitter API if not enough cached
+    print("Fetching tweets from Twitter API...")
+    response = twitter_service.get_my_tweets()
+    utils.debug_print(response, "Twitter API response for fetching tweets")
 
     data = response.json()
     if "data" in data:
