@@ -54,15 +54,12 @@ def set_github_variable(var_name, var_value):
         raise e
 
 
-def get_target_ids():
-    # Secret から JSON 文字列を取得
-    raw_json = os.getenv("X_TARGET_IDS_JSON", "[]")
-    if raw_json:
-        return json.loads(raw_json)
-    return []
-
-
 def save_target_ids(ids):  # [{type: "tweet"/"retweet", id: str}, ...]
     # リストを JSON 文字列にして Secret に保存
+    try:
     json_str = json.dumps(ids)
     subprocess.run(["gh", "secret", "set", "X_TARGET_IDS_JSON", "--body", json_str])
+        return True
+    except subprocess.CalledProcessError as e:
+        print(f"✗ Failed to save target IDs: {e.stderr}")
+        raise e
