@@ -23,9 +23,8 @@ def do() -> None:
     response = twitter_service.get_my_tweets()
     utils.debug_print(response, "Twitter API response for fetching tweets")
 
-    data = response.json()
-    if "data" in data:
-        for tweet in data["data"]:
+    if "data" in response:
+        for tweet in response["data"]:
             if (
                 tweet.get("referenced_tweets")
                 and len(tweet["referenced_tweets"]) > 0
