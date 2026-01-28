@@ -7,7 +7,7 @@ from pprint import pprint
 import configs.setup_config as config
 import states.app_state as state
 import utils.common as utils
-import services.github as github
+import services.github as github_service
 
 MY_CLIENT = None
 
@@ -64,7 +64,7 @@ def my_client() -> tweepy.Client:
         new_refresh_token = refresh_token
         if new_refresh_token and new_refresh_token != config.X_REFRESH_TOKEN:
             utils.print_secret(new_refresh_token, "New refresh token received")
-            github.set_github_secret("X_REFRESH_TOKEN", new_refresh_token)
+            github_service.set_github_secret("X_REFRESH_TOKEN", new_refresh_token)
 
             if "--debug" in sys.argv:
                 pprint(token_data)
@@ -89,8 +89,8 @@ def my_client() -> tweepy.Client:
                     print("Wiping secrets to prevent repeated failures on next run")
                     print("Please run setup_secret.py again to re-authenticate")
                     # Wipe the secrets so next run knows setup is needed
-                    github.set_github_secret("X_REFRESH_TOKEN", "__None__")
-                    github.set_github_secret("X_UNTIL_ID", "__None__")
+                    github_service.set_github_secret("X_REFRESH_TOKEN", "__None__")
+                    github_service.set_github_secret("X_UNTIL_ID", "__None__")
         raise Exception("Failed to refresh access token") from e
     except Exception as e:
         print(f"Error refreshing token: {e}")
@@ -210,6 +210,14 @@ def get_my_tweets() -> tweepy.Response | requests.models.Response:
         utils.debug_print(params, "Fetching tweets with params")
         result = my_client().get_users_tweets(**params)
         utils.debug_print(result, "Fetched tweets response")
+
+        data = result.json()
+        if len(data["data"]) > 0:
+            github_service.set_github_secret("X_UNTIL_ID", data["data"][-1]["id"])
+        else:
+            print("No tweets found in the fetched data.")
+            github_service.set_github_secret("X_UNTIL_ID", "__None__")
+
     except tweepy.TweepyException as e:
         print(f"Error fetching tweets: {e}")
         raise e
