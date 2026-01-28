@@ -97,6 +97,7 @@ def set_tweet_ids(tweets):  # [{type: "tweet"/"retweet", id: str}, ...]
     tweets_json = json.dumps(tweets)
     app_state.set_tweets(tweets)
     app_config.X_TARGET_IDS_JSON = tweets_json
-    github_service.set_github_secret({"X_TARGET_IDS_JSON": tweets_json})
-    github_service.set_github_variable({"X_TARGET_IDS_JSON": tweets_json})
+    github_service.set_github_secret("X_TARGET_IDS_JSON", tweets_json)
+    # TODO: Remove set_github_variable for X_TARGET_IDS_JSON after check on Github Actoins
+    github_service.set_github_variable("X_TARGET_IDS_JSON", tweets_json)
     debug_print(tweets_json, "Updated tweet IDs JSON")
