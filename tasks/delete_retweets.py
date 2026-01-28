@@ -3,7 +3,6 @@
 
 import utils.common as utils
 import configs.app_config as app_config
-import states.app_state as app_state
 import services.twitter as twitter_service
 
 
@@ -11,7 +10,7 @@ import services.twitter as twitter_service
 def do():
     print("Deleting retweets from fetched queues...")
 
-    all_tweets = app_state.get_tweets()
+    all_tweets = utils.get_tweet_ids()
     if not all_tweets or len(all_tweets) == 0:
         print("No retweets to delete.")
         return

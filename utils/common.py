@@ -91,13 +91,17 @@ def debug_print(value, label=None):
             print(value)
 
 
-# update app_state.tweets and app_config.X_TARGET_IDS_JSON
-def set_tweet_ids(tweets):  # [{type: "tweet"/"retweet", id: str}, ...]
+# get tweet IDs from app_state.tweets
+def get_tweet_ids():  # [{type: "tweet"/"retweet", id: str}, ...]
+    """Get tweet IDs from app state."""
+    return app_state.get_tweets()
 
+
+# update app_state.tweets and save to Github Secrets
+def set_tweet_ids(tweets):  # [{type: "tweet"/"retweet", id: str}, ...]
     tweets_json = json.dumps(tweets)
     app_state.set_tweets(tweets)
-    app_config.X_TARGET_IDS_JSON = tweets_json
-    github_service.set_github_secret("X_TARGET_IDS_JSON", tweets_json)
-    # TODO: Remove set_github_variable for X_TARGET_IDS_JSON after check on Github Actoins
+    github_service.save_target_ids(tweets)
+    # TODO: Remove set_github_variable for X_TARGET_IDS_JSON after check on Github Actions
     github_service.set_github_variable("X_TARGET_IDS_JSON", tweets_json)
     debug_print(tweets_json, "Updated tweet IDs JSON")

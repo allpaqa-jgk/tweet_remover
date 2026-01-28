@@ -1,7 +1,6 @@
 # Fetch Tweets older than a certain number of days
 
 import utils.common as utils
-import states.app_state as app_state
 import configs.app_config as app_config
 import services.twitter as twitter_service
 
@@ -12,11 +11,11 @@ import services.twitter as twitter_service
 def do():
     print("Fetching tweets for retweet deletion task...")
 
-    all_tweets = app_state.get_tweets()
+    all_tweets = utils.get_tweet_ids()
 
     # return cached if we have more than NUM_TO_FETCH(100) tweets
     if len(all_tweets) > app_config.NUM_TO_FETCH:
-        return all_tweets
+        return
 
     # Fetch tweets from Twitter API if not enough cached
     print("Fetching tweets from Twitter API...")

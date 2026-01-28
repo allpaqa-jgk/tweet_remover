@@ -5,15 +5,15 @@ from configs.app_config import X_ACCESS_TOKEN, X_TARGET_IDS_JSON
 
 # Schema: [{type: "tweet"/"retweet", id: str}, ...]
 def init_tweets():
-    tweets = []
+    _tweets = []
 
     for t in json.loads(X_TARGET_IDS_JSON):
         type = t.get("type")
         id = t.get("id")
         if type in ["tweet", "retweet"] and id:
-            tweets.append({"type": type, "id": id})
+            _tweets.append({"type": type, "id": id})
 
-    return tweets
+    return _tweets
 
 
 access_token = X_ACCESS_TOKEN

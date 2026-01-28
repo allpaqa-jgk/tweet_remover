@@ -107,7 +107,13 @@ def exchange_code_for_token(code: str):
         "client_id": config.X_CLIENT_ID,
     }
 
-    return request_token(data)
+    try:
+        response = request_token(data)
+    except requests.exceptions.RequestException as e:
+        print(f"Error exchanging code for token: {e}")
+        raise e
+
+    return response
 
 
 # Exchange refresh token for new access token
@@ -118,7 +124,13 @@ def exchange_refresh_token():
         "client_id": config.X_CLIENT_ID,
     }
 
-    return request_token(data)
+    try:
+        response = request_token(data)
+    except requests.exceptions.RequestException as e:
+        print(f"Error exchanging refresh token for new access token: {e}")
+        raise e
+
+    return response
 
 
 # Request token from X API
@@ -136,11 +148,11 @@ def request_token(data={}):
         response.raise_for_status()
 
         token_data = response.json()
-
-        return token_data
     except requests.exceptions.RequestException as e:
         print(f"Error requesting token: {e}")
         raise e
+
+    return token_data
 
 
 # Get authenticated user info
@@ -194,9 +206,13 @@ def get_my_tweets():
     if config.X_UNTIL_ID and config.X_UNTIL_ID != "__None__":
         params["until_id"] = config.X_UNTIL_ID
 
+    try:
     utils.debug_print(params, "Fetching tweets with params")
     result = my_client().get_users_tweets(**params)
     utils.debug_print(result, "Fetched tweets response")
+    except tweepy.TweepyException as e:
+        print(f"Error fetching tweets: {e}")
+        raise e
     return result
 
 
