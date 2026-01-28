@@ -64,9 +64,7 @@ jobs:
           DEBUG: ${{ inputs.debug }}
         run: |
           if [ "$DEBUG" = "true" ]; then
-            python -u batches/remove_retweets.py --debug
-          elif [ "$CHECK_ONLY" = "true" ]; then
-            python -u batches/remove_retweets.py --check
+            python -u -m batches.delete_retweets --debug
           else
-            python -u batches/remove_retweets.py
+            python -u -m batches.delete_retweets
           fi
