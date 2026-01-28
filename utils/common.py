@@ -2,6 +2,7 @@ import json
 import sys
 import base64
 
+import configs.app_config as app_config
 import states.app_state as app_state
 import services.github as github_service
 import services.discord as discord_service
@@ -16,9 +17,11 @@ def encode_basic_token(client_id, client_secret):
 def exec_with_discord_notification(func, *args, **kwargs):
     try:
         func(*args, **kwargs)
-        discord_service.send_message("✅ Batch process completed successfully.")
+        if "task_succeeded" in app_config.WEBHOOK_EVENTS:
+            discord_service.send_message("✅ Batch process completed successfully.")
     except Exception as e:
-        discord_service.send_message(f"❌ Error in batch process: {e}")
+        if "task_failed" in app_config.WEBHOOK_EVENTS:
+            discord_service.send_message(f"❌ Error in batch process: {e}")
 
         print(f"Error in batch process: {e}")
         if "--debug" in sys.argv:

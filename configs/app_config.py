@@ -8,6 +8,7 @@ NUM_TO_FETCH = 100
 NUM_TO_DELETE = 100
 REMOVE_TWEETS_BATCH_SIZE = 10
 REMOVE_RETWEETS_BATCH_SIZE = 1
+WEBHOOK_EVENTS = ["task_failed", "task_succeeded"]  # "task_failed", "task_succeeded"
 
 # OAuth2 configuration
 GH_TOKEN = os.environ.get("GH_TOKEN")
