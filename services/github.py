@@ -1,5 +1,4 @@
 import json
-import os
 import subprocess
 
 
@@ -29,7 +28,7 @@ def set_github_secret(secret_name: str, secret_value: str) -> bool:
             text=True,
             check=True,
         )
-        print(f"✓ Secret {secret_name} set successfully", secret_value)
+        print(f"✓ Secret {secret_name} set successfully")
         return True
     except subprocess.CalledProcessError as e:
         print(f"✗ Failed to set secret {secret_name}: {e.stderr}")
@@ -58,7 +57,12 @@ def save_target_ids(ids: list) -> bool:  # [{type: "tweet"/"retweet", id: str}, 
     # リストを JSON 文字列にして Secret に保存
     try:
         json_str = json.dumps(ids)
-        subprocess.run(["gh", "secret", "set", "X_TARGET_IDS_JSON", "--body", json_str])
+        subprocess.run(
+            ["gh", "secret", "set", "X_TARGET_IDS_JSON", "--body", json_str],
+            capture_output=True,
+            text=True,
+            check=True,
+        )
         return True
     except subprocess.CalledProcessError as e:
         print(f"✗ Failed to save target IDs: {e.stderr}")

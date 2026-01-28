@@ -1,6 +1,7 @@
 # Delete Tweets older than a certain number of days
 
 
+import tweepy
 import utils.common as utils
 import configs.app_config as app_config
 import services.twitter as twitter_service
@@ -22,18 +23,16 @@ def do() -> None:
     removed_ids = set()
     for tweet in all_tweets:
         if tweet["type"] == "tweet":
-            response = twitter_service.delete_my_tweet(tweet["id"])
-            if "status_code" in response and response.status_code == 200:
+            try:
+                twitter_service.delete_my_tweet(tweet["id"])
                 print(f"Deleted tweet ID {tweet['id']}")
                 num_deleted += 1
                 removed_ids.add(tweet["id"])
-            else:
-                print(
-                    f"Error deleting tweet ID {tweet['id']}: {response.status_code} {response.text}"
-                )
+            except tweepy.TweepyException as e:
+                print(f"Error deleting tweet ID {tweet['id']}: {e}")
 
-        if num_deleted >= app_config.REMOVE_TWEETS_BATCH_SIZE:
-            break
+            if num_deleted >= app_config.REMOVE_TWEETS_BATCH_SIZE:
+                break
     for removed_id in removed_ids:
         all_tweets = [t for t in all_tweets if t["id"] != removed_id]
 
