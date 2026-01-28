@@ -1,4 +1,4 @@
-name: Daily Batch Job
+name: Fetch and Remove Tweets
 
 on:
   schedule:
@@ -49,7 +49,7 @@ jobs:
             sudo apt install gh -y
           }
       
-      - name: Daily batch job execution
+      - name: Fetch and Remove Tweets
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           X_CLIENT_ID: ${{ secrets.X_CLIENT_ID }}

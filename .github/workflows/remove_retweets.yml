@@ -1,4 +1,4 @@
-name: Hourly Batch Job
+name: Remove Retweets
 
 on:
   schedule:
@@ -49,7 +49,7 @@ jobs:
             sudo apt install gh -y
           }
       
-      - name: Hourly batch job execution
+      - name: Remove Retweets
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           X_CLIENT_ID: ${{ secrets.X_CLIENT_ID }}
