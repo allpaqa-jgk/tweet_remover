@@ -1,12 +1,17 @@
 import json
-from multiprocessing.util import debug
 import sys
 import base64
+from typing import TypedDict
 
 import states.app_state as app_state
-import configs.app_config as app_config
 import services.github as github_service
 import services.discord as discord_service
+
+
+# [{type: "tweet"/"retweet", id: str}, ...]
+class TweetInfo(TypedDict):
+    type: str  # "tweet" | "retweet"
+    id: str
 
 
 def encode_basic_token(client_id, client_secret):
@@ -92,17 +97,13 @@ def debug_print(value, label=None):
 
 
 # get tweet IDs from app_state.tweets
-def get_tweet_ids() -> (
-    list[dict["type":str, "id":str]]
-):  # [{type: "tweet"/"retweet", id: str}, ...]
+def get_tweet_ids() -> list[TweetInfo]:
     """Get tweet IDs from app state."""
     return app_state.get_tweets()
 
 
 # update app_state.tweets and save to Github Secrets
-def set_tweet_ids(
-    tweets: list[dict["type":str, "id":str]],
-) -> None:  # [{type: "tweet"/"retweet", id: str}, ...]
+def set_tweet_ids(tweets: list[TweetInfo]) -> None:
     tweets_json = json.dumps(tweets)
     app_state.set_tweets(tweets)
     github_service.save_target_ids(tweets)
