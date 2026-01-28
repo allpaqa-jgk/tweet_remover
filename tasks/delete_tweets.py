@@ -24,7 +24,7 @@ def do():
     for tweet in all_tweets:
         if tweet["type"] == "tweet":
             response = twitter_service.delete_my_tweet(tweet["id"])
-            if response.status_code == 200:
+            if "status_code" in response and response.status_code == 200:
                 print(f"Deleted tweet ID {tweet['id']}")
                 num_deleted += 1
                 removed_ids.add(tweet["id"])
