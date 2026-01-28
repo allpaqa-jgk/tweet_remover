@@ -20,6 +20,7 @@ def do():
     # Fetch tweets from Twitter API if not enough cached
     print("Fetching tweets from Twitter API...")
     response = twitter_service.get_my_tweets()
+    utils.debug_print(response, "Twitter API response for fetching tweets")
     if response.status_code != 200:
         raise Exception(
             f"Error fetching tweets: {response.status_code} {response.text}"
